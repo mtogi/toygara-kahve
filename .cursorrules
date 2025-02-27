@@ -1,0 +1,75 @@
+{
+    "project": {
+      "name": "buy-me-coffee",
+      "description": "A personal 'Buy Me a Coffee' app with Stripe integration",
+      "structure": {
+        "client": {
+          "description": "React frontend application",
+          "technologies": ["React", "Tailwind CSS", "Stripe Checkout JS"]
+        },
+        "server": {
+          "description": "Express backend for Stripe integration",
+          "technologies": ["Node.js", "Express", "Stripe Node SDK"]
+        }
+      }
+    },
+    "requirements": {
+      "functional": [
+        "Display coffee purchase options (Small $3, Medium $5, Large $7)",
+        "Process payments through Stripe Checkout",
+        "Show success/cancel pages after payment attempt",
+        "No authentication required",
+        "Mobile responsive design"
+      ],
+      "technical": [
+        "Use environment variables for Stripe API keys",
+        "Keep frontend and backend code separate",
+        "Include proper error handling",
+        "Follow React best practices",
+        "Ensure Stripe integration is secure"
+      ]
+    },
+    "dependencies": {
+      "frontend": [
+        "react",
+        "react-dom",
+        "react-router-dom",
+        "tailwindcss",
+        "@stripe/stripe-js"
+      ],
+      "backend": [
+        "express",
+        "cors",
+        "dotenv",
+        "stripe",
+        "body-parser"
+      ]
+    },
+    "fileStructure": {
+      "preserveStructure": true,
+      "mainFiles": [
+        "client/src/App.js",
+        "server/server.js",
+        "client/src/components/CoffeeOption.js",
+        "server/routes/checkout.js"
+      ]
+    },
+    "styling": {
+      "preferredFramework": "tailwindcss",
+      "colorScheme": {
+        "primary": "#6F4E37",
+        "secondary": "#F5F5F5",
+        "accent": "#4169E1"
+      }
+    },
+    "stripeIntegration": {
+      "mode": "test",
+      "products": [
+        {"name": "Small Coffee", "price": 300},
+        {"name": "Medium Coffee", "price": 500},
+        {"name": "Large Coffee", "price": 700}
+      ],
+      "currency": "cad",
+      "paymentMethods": ["card"]
+    }
+  }
