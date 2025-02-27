@@ -1,144 +1,140 @@
 # Buy Me a Coffee App
 
-A simple web application that allows friends and family to support your work by buying you a virtual coffee. This project integrates with Stripe for payment processing.
+A personal "Buy Me a Coffee" application with Stripe integration that allows visitors to support you by purchasing virtual coffee.
 
 ## Features
 
-- Clean, responsive UI built with React and Tailwind CSS
-- Three coffee purchase options (Small $3, Medium $5, Large $7)
-- Secure payment processing with Stripe Checkout
-- Success and cancel pages for payment feedback
-- Mobile-friendly design
+- Display coffee purchase options (Small $3, Medium $5, Large $7)
+- Process payments through Stripe Checkout
+- Show success/cancel pages after payment attempt
+- No authentication required
+- Mobile responsive design
 
-## Project Structure
+## Tech Stack
 
-```
-buy-me-coffee/
-├── client/                 # React frontend
-│   ├── public/             # Static files
-│   ├── src/                # Source code
-│   │   ├── components/     # UI components
-│   │   ├── pages/          # Main pages
-│   │   ├── assets/         # Images and icons
-│   │   ├── App.js          # Main application component
-│   │   └── index.js        # Entry point
-│   └── package.json        # Frontend dependencies
-├── server/                 # Express backend
-│   ├── routes/             # API routes
-│   ├── server.js           # Express server setup
-│   └── package.json        # Backend dependencies
-├── package.json            # Root package.json for running both client and server
-└── README.md               # Project documentation
-```
+### Frontend
+- React
+- React Router
+- Tailwind CSS
+- Stripe Checkout JS
 
-## Prerequisites
-
-- Node.js (v14 or higher)
-- npm or yarn
-- Stripe account (for API keys)
+### Backend
+- Node.js
+- Express
+- Stripe Node SDK
+- dotenv for environment variables
 
 ## Setup Instructions
 
-### 1. Clone the repository
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+- Stripe account (for payment processing)
 
-```bash
-git clone <repository-url>
+### Installation
+
+1. Clone the repository
+```
+git clone https://github.com/yourusername/buy-me-coffee.git
 cd buy-me-coffee
 ```
 
-### 2. Install dependencies (Option 1 - All at once)
-
-You can install all dependencies at once using the root package.json:
-
-```bash
-npm run install-all
+2. Install dependencies for both client and server
 ```
-
-### 3. Install dependencies (Option 2 - Separately)
-
-Alternatively, you can install dependencies for each part separately:
-
-```bash
 # Install server dependencies
-cd server
 npm install
 
 # Install client dependencies
-cd ../client
+cd client
 npm install
+cd ..
 ```
 
-### 4. Set up environment variables
+3. Set up environment variables
+   - Create a `.env` file in the server directory based on the example
+   - Create a `.env` file in the client directory based on the example
 
-Create .env files for both client and server:
-
-```bash
-# Server .env file
-cd server
-cp .env.example .env
-
-# Client .env file
-cd ../client
-cp .env.example .env
+4. Start the development servers
 ```
-
-Edit both .env files to add your Stripe API keys:
-- In server/.env, add your Stripe secret key
-- In client/.env, add your Stripe publishable key
-
-### 5. Start the development servers
-
-#### Option 1: Start both servers at once
-
-From the root directory:
-
-```bash
-npm start
-```
-
-#### Option 2: Start servers separately
-
-In one terminal, start the backend server:
-
-```bash
-cd server
+# Start both client and server concurrently
 npm run dev
 ```
 
-In another terminal, start the frontend development server:
+## Switching from Test Mode to Live Mode
 
-```bash
-cd client
-npm start
-```
+The application is initially configured to use Stripe's test mode. To process real payments, follow these steps:
 
-The application should now be running at [http://localhost:3000](http://localhost:3000).
+1. **Create a Stripe Account**
+   - If you don't have one already, sign up at [stripe.com](https://stripe.com)
+   - Complete the account verification process
 
-## Testing Payments
+2. **Get Your Live API Keys**
+   - Log in to your Stripe Dashboard
+   - Navigate to Developers > API keys
+   - Note your Publishable key and Secret key (keep the Secret key secure!)
 
-Since this is using Stripe in test mode, you can use the following test card numbers:
+3. **Update Server Environment Variables**
+   - Open `server/.env`
+   - Comment out the test keys and uncomment the live keys
+   - Replace the placeholder values with your actual live keys:
+   ```
+   # STRIPE_SECRET_KEY=sk_test_...
+   # STRIPE_PUBLISHABLE_KEY=pk_test_...
+   
+   STRIPE_SECRET_KEY=sk_live_your_live_secret_key
+   STRIPE_PUBLISHABLE_KEY=pk_live_your_live_publishable_key
+   ```
+   - Set `NODE_ENV=production`
 
-- Successful payment: 4242 4242 4242 4242
-- Failed payment: 4000 0000 0000 9995
+4. **Update Client Environment Variables**
+   - Open `client/.env`
+   - Comment out the test key and uncomment the live key
+   - Replace the placeholder value with your actual live publishable key:
+   ```
+   # REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_...
+   
+   REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_live_your_live_publishable_key
+   ```
+
+5. **Rebuild and Deploy**
+   - Rebuild your client application:
+   ```
+   cd client
+   npm run build
+   cd ..
+   ```
+   - Restart your server or redeploy your application
+
+6. **Test a Live Payment**
+   - Make a small test purchase to ensure everything is working correctly
+   - Check your Stripe Dashboard to confirm the payment was processed
+
+## Testing Stripe Payments
+
+### Test Mode
+In test mode, you can use these test card numbers:
+- **Success**: 4242 4242 4242 4242
+- **Requires Authentication**: 4000 0025 0000 3155
+- **Declined**: 4000 0000 0000 0002
 
 Use any future expiration date, any 3-digit CVC, and any postal code.
 
-## Deployment
+### Live Mode
+In live mode, real cards will be charged. Make sure your application is properly secured before accepting live payments.
 
-For production deployment:
+## Troubleshooting
 
-1. Set up environment variables for production
-2. Build the React frontend: `npm run build` (from root directory)
-3. Deploy the backend to a Node.js hosting service
-4. Deploy the frontend build to a static hosting service
+### Blank Success Page
+If you encounter a blank success page after payment:
+1. Check browser console for errors
+2. Verify that your server is running and accessible
+3. Ensure the `REACT_APP_API_URL` is correctly set in client/.env
+4. Check that the session ID is being properly passed in the URL
 
 ## License
 
-This project is for personal learning purposes.
+[MIT](LICENSE)
 
-## Acknowledgements
+## Author
 
-- [React](https://reactjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Stripe](https://stripe.com/)
-- [Express](https://expressjs.com/) 
+Your Name 
