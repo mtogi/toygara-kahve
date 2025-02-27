@@ -4,9 +4,13 @@ import { loadStripe } from '@stripe/stripe-js';
 
 // Check if the environment variable is being loaded
 console.log('Stripe Key:', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+console.log('API URL:', process.env.REACT_APP_API_URL);
 
 // Initialize Stripe with publishable key
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+
+// Get the API URL from environment or use a relative path for production
+const API_URL = process.env.REACT_APP_API_URL || '/api';
 
 const CoffeeOption = ({ type, title, price, description, image }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +23,7 @@ const CoffeeOption = ({ type, title, price, description, image }) => {
       setError(null);
       
       console.log('Starting checkout process for', type);
-      console.log('API URL:', process.env.REACT_APP_API_URL);
+      console.log('Using API URL:', API_URL);
       
       // Get Stripe.js instance
       const stripe = await stripePromise;
@@ -29,7 +33,7 @@ const CoffeeOption = ({ type, title, price, description, image }) => {
       }
       
       // Call backend to create checkout session
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/checkout/create-checkout-session`, {
+      const response = await axios.post(`${API_URL}/checkout/create-checkout-session`, {
         coffeeType: type
       });
       

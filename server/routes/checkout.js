@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+// Log environment variables for debugging
+console.log('Environment:', process.env.NODE_ENV);
+console.log('Client URL:', process.env.CLIENT_URL);
+
 /**
  * @route POST /api/checkout/create-checkout-session
  * @desc Create a Stripe checkout session
@@ -38,6 +42,12 @@ router.post('/create-checkout-session', async (req, res) => {
     // Get the selected coffee option
     const selectedCoffee = coffeeOptions[coffeeType];
     
+    // Determine the client URL for redirects
+    const clientUrl = process.env.CLIENT_URL || 
+                     (process.env.NODE_ENV === 'production' ? 
+                      'https://toygara-kahve.onrender.com' : 
+                      'http://localhost:3000');
+    
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -56,8 +66,8 @@ router.post('/create-checkout-session', async (req, res) => {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      success_url: `${clientUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${clientUrl}/cancel`,
     });
     
     res.json({ id: session.id, url: session.url });
