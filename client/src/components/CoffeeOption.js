@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 
+// Check if the environment variable is being loaded
+console.log('Stripe Key:', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+
 // Initialize Stripe with publishable key
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
