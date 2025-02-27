@@ -35,6 +35,7 @@ router.post('/create-checkout-session', async (req, res) => {
       return res.status(400).json({ error: 'Invalid coffee type selected' });
     }
     
+    // Get the selected coffee option
     const selectedCoffee = coffeeOptions[coffeeType];
     
     // Create Stripe checkout session

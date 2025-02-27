@@ -2,6 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
+// Check if the key is available
+console.log('Stripe Key Available:', !!process.env.STRIPE_SECRET_KEY);
+
+// Initialize Stripe with the key
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const path = require('path');
 
@@ -21,15 +26,15 @@ app.use('/api/checkout', checkoutRoutes);
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../client/build')));
 
+// Health check route
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'Server is running' });
+});
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
-});
-
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'Server is running' });
 });
 
 // Error handling middleware
